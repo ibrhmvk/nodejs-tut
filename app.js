@@ -1,13 +1,20 @@
 const express = require("express");
+const morgan = require("morgan");
 
+// express app
 const app = express();
 
-app.listen(3000);
-
+// register view engine
 app.set("view engine", "ejs");
 
+// listen for requests
+app.listen(3000);
+
+// middleware and static files
+app.use(express.static("public"));
+app.use(morgan("dev"));
+
 app.get("/", (req, res) => {
-  console.log(req.url, req.method);
   const blogs = [
     {
       title: "Yoshi finds eggs",
@@ -22,20 +29,17 @@ app.get("/", (req, res) => {
       snippet: "Lorem ipsum dolor sit amet consectetur",
     },
   ];
-  res.render("index", {title: "Home", blogs });
+  res.render("index", { title: "Home", blogs });
 });
 
 app.get("/about", (req, res) => {
-  console.log(req.url, req.method);
-  res.render("about", {title: "About" });
+  res.render("about", { title: "About" });
 });
 
 app.get("/blogs/create", (req, res) => {
-  console.log(req.url, req.method);
-  res.render("create", {title: "Create a blog" });
+  res.render("create", { title: "Create a blog" });
 });
 
 app.use((req, res) => {
-  console.log(req.url, req.method);
-  res.status(404).render("404", {title: "404" });
+  res.status(404).render("404", { title: "404" });
 });
